@@ -159,8 +159,11 @@ void TestGetMinutes(){
 	TimeCode tc3 = TimeCode(8, 60, 9);
 	assert(tc3.GetMinutes() == 0);
 	
-	TimeCode tc4 = TimeCode(8, 60, 60);
-	assert(tc4.GetMinutes() == 1);
+	TimeCode tc4 = TimeCode(8, 61, 60);
+	assert(tc4.GetMinutes() == 2);
+	
+	TimeCode tc5 = TimeCode(5, 1000000, 9);
+	assert(tc5.GetHours() == 16671);
 	
 	cout << "PASSED!" << endl << endl;
 }
@@ -193,6 +196,9 @@ void TestSetHours(){
 	
 	tc.SetHours(0);
 	assert(tc.ToString() == "0:5:2");
+	
+	tc.SetHours(900000);
+	assert(tc.ToString() == "900000:5:2");
 	
 	TimeCode tc1 = TimeCode(3, 60, 2);
 	tc1.SetHours(3);
@@ -257,7 +263,7 @@ void TestReset(){
 	TimeCode tc2 = TimeCode(8, 5, 9);
 	assert(tc2.GetTimeCodeAsSeconds() == 0);
 	
-	TimeCode tc3 = TimeCode(90000, 3, 60);
+	TimeCode tc3 = TimeCode(900000, 3, 60);
 	assert(tc3.GetTimeCodeAsSeconds() == 0);
 	
 	cout << "PASSED!" << endl << endl;
@@ -280,6 +286,10 @@ void TestAdd(){
 	TimeCode tc8 = TimeCode(0, 34, 15);
 	TimeCode tc9 = tc7 + tc8;
 	assert(tc9.ToString() == "4:34:10");
+	
+	TimeCode tc10 = TimeCode(900000, 34, 25);
+	TimeCode tc11 = tc7 + tc10;
+	assert(tc11.ToString() == "900004:34:20");
 	
 	cout << "PASSED!" << endl << endl;	
 }
@@ -306,6 +316,10 @@ void TestSubtract(){
 	TimeCode tc7 = tc5 - tc6;
 	assert(tc7.ToString() == "2:32:23");
 	
+	TimeCode tc8 = TimeCode(900000, 21, 16);
+	TimeCode tc9 = tc8 - tc5;
+	assert(tc9.ToString() == "899990:58:6");	
+	
 	cout << "PASSED!" << endl << endl;
 }
 
@@ -329,6 +343,10 @@ void TestMutiply(){
 	
 	TimeCode tc9 = tc7 * 0;
 	assert(tc9.ToString() == "0:0:0");
+	
+	TimeCode tc10 = TimeCode(500000, 25, 29);
+	TimeCode tc11 = tc10 * 2;
+	assert(tc11.ToString() == "1000000:50:58");
 	
 	try{
 		TimeCode tc10 = tc7 * (-1);
@@ -355,6 +373,10 @@ void TestDivide(){
 	TimeCode tc5 = TimeCode(2, 10, 45);
 	TimeCode tc6 = tc5 / 2.5;
 	assert(tc6.ToString() == "0:52:18");
+	
+	TimeCode tc7 = TimeCode(1000000, 10, 45);
+	TimeCode tc8 = tc7 / 5;
+	assert(tc8.ToString() == "200000:2:9");
 	
 	try{
 		TimeCode tc7 = tc5 / 0;			//can't divide by 0	
