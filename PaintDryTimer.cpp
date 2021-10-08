@@ -107,8 +107,8 @@ int main(){
 			
 			for (unsigned int i = 0; i < all_batch.size(); i++){
 				
-				if (get_time_remaining(dss) <= 0){
-					delete dss.timeToDry;
+				if (get_time_remaining(all_batch.at(i)) <= 0){
+					delete all_batch.at(i).timeToDry;
 					all_batch.erase(all_batch.begin()+i);
 					numItem--;
 					
