@@ -54,26 +54,42 @@ void tests(){
 	dss.timeToDry = &tc;
 	long long int ans = get_time_remaining(dss);
 	assert(ans > 6 && ans < 8);
-	// add more tests here
+	
+	TimeCode tc1 = TimeCode(1, 2, 5);
+	dss.timeToDry = &tc1;
+	ans = get_time_remaining(dss);
+	assert(ans > 3724 && ans < 3726);
+	
+	TimeCode tc2 = TimeCode();
+	dss.timeToDry = &tc2;
+	ans = get_time_remaining(dss);
+	assert(ans > -1 && ans < 1);
 
 
 	// get_sphere_sa
 	double sa = get_sphere_sa(2.0);
 	assert (50.2654 < sa && sa < 50.2655);
-	// add more tests here
 	
 	double sa1 = get_sphere_sa(0);
 	assert (sa1 == 0);
+	
+	double sa2 = get_sphere_sa(90.78);
+	assert(103559 < sa2 && sa2 < 103560);
 
 
 	// compute_time_code
-	TimeCode *tc2 = compute_time_code(1.0);
+	TimeCode *tc3 = compute_time_code(1.0);
 	//cout << "tc: " << tc.GetTimeCodeAsSeconds() << endl;
-	assert(tc2->GetTimeCodeAsSeconds() == 1);
-	delete tc2;
+	assert(tc3->GetTimeCodeAsSeconds() == 1);
+	delete tc3;
 
-
-	// add more tests here
+	TimeCode *tc4 = compute_time_code(sa);
+	assert(tc4->GetTimeCodeAsSeconds() == 50);
+	delete tc4;
+	
+	TimeCode *tc5 = compute_time_code(sa1);
+	assert(tc5->GetTimeCodeAsSeconds() == 0);
+	delete tc5;
 
 
 	cout << "ALL TESTS PASSED!" << endl;
@@ -107,10 +123,13 @@ int main(){
 			
 			for (unsigned int i = 0; i < all_batch.size(); i++){
 				
-				if (get_time_remaining(all_batch.at(i)) <= 0){
+				/* If time remaining reaches 0, delete the batch from the heap 
+				 * and from the output */
+				if (get_time_remaining(all_batch.at(i)) <= 0){		
 					delete all_batch.at(i).timeToDry;
 					all_batch.erase(all_batch.begin()+i);
 					numItem--;
+					i--;
 					
 				} else {
 					cout << drying_snap_shot_to_string(all_batch.at(i)) << endl;
@@ -125,6 +144,16 @@ int main(){
 		
 	}
 				
-	//tests());
+	//tests();
+	
+	if (ans == "q" && all_batch.size() > 0){
+		for (unsigned int i = 0; i < all_batch.size(); i++){
+			delete all_batch.at(i).timeToDry;
+			all_batch.erase(all_batch.begin()+i);
+			numItem--;
+			i--;
+		}
+	}
+	
 	return 0;
 }
