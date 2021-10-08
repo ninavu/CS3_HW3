@@ -21,7 +21,8 @@ struct DryingSnapShot {
 long long int get_time_remaining(DryingSnapShot dss){
 	
 	int currTime = time(0) - dss.startTime;			// elapsed time
-	return dss.timeToDry->GetTimeCodeAsSeconds() - currTime;
+	int duration = dss.timeToDry->GetTimeCodeAsSeconds() - currTime;
+	return duration;
 }
 
 
@@ -40,7 +41,7 @@ double get_sphere_sa(double rad){
 
 TimeCode *compute_time_code(double surfaceArea){
 	int sa = int (surfaceArea);					// convert to int to prevent overflow
-	TimeCode *totalDryTime = new TimeCode(0, 0, sa);
+	TimeCode *totalDryTime = new TimeCode(0, 0, sa);		// place new data inside a heap
 	return totalDryTime;
 }
 
@@ -81,7 +82,7 @@ int main(){
 	double rad;
 	DryingSnapShot dss;
 	vector<DryingSnapShot> all_batch;
-	int numItem = 0;
+	unsigned int numItem = 0;
 	
 	cout << "Choose an option: (A)dd, (V)iew Current Items, (Q)uit: ";
 	cin >> ans;
@@ -99,18 +100,24 @@ int main(){
 			all_batch.push_back(dss);
 			numItem++;
 			
-			cout << "Choose an option: (A)dd, (V)iew Current Items, (Q)uit: ";
-			cin >> ans;
-			
 		} else if (ans == "v"){
+			
 			for (unsigned int i = 0; i < numItem; i++){
+				if (get_time_remaining(dss) <= 0){
+					delete dss.timeToDry;
+					numItem--;
+				}
 				cout << drying_snap_shot_to_string(all_batch.at(i)) << endl;
 			}
-			
+		
 			cout <<  numItem << " items being tracked." << endl;
-			cout << "Choose an option: (A)dd, (V)iew Current Items, (Q)uit: ";
-			cin >> ans;
 		}
+		if (get_time_remaining(dss) <= 0){
+			delete dss.timeToDry;
+			numItem--;
+		}
+		cout << "Choose an option: (A)dd, (V)iew Current Items, (Q)uit: ";
+		cin >> ans;
 		
 	}
 				

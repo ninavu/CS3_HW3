@@ -10,7 +10,7 @@ using namespace std;
 
 string vec_to_string(vector<string> v){
 	string str = "[";
-	for (unsigned int i= 0; i < v.size()-1; i++){
+	for (unsigned int i = 0; i < v.size()-1; i++){
 		str.append(v.at(i));
 		str.append(", ");
 	}
@@ -62,7 +62,6 @@ int main(){
 	string timeVal;
 	TimeCode sum;
 	int count = 0;
-	TimeCode avg = sum / count;
 	
 	inFS.open("Space_Corrected.csv");
 
@@ -83,6 +82,7 @@ int main(){
 		}
 	}
 	
+	TimeCode avg = sum / count;
 	cout << count << " data points. " << endl;
 	cout << "AVERAGE: " << avg.ToString() << endl;
 	
