@@ -61,6 +61,9 @@ void tests(){
 	double sa = get_sphere_sa(2.0);
 	assert (50.2654 < sa && sa < 50.2655);
 	// add more tests here
+	
+	double sa1 = get_sphere_sa(0);
+	assert (sa1 == 0);
 
 
 	// compute_time_code
@@ -97,25 +100,26 @@ int main(){
 			dss.name = to_string(rand());
 			
 			cout << "Batch-" << dss.name << " will dry in " << dss.timeToDry->ToString() << endl;
-			all_batch.push_back(dss);
+			all_batch.push_back(dss);		// add each batch into a vector
 			numItem++;
 			
 		} else if (ans == "v"){
 			
-			for (unsigned int i = 0; i < numItem; i++){
-				if (get_time_remaining(dss) <= 0){
+			for (unsigned int i = numItem; i > 0; i--){
+				
+				if (get_time_remaining(dss) <= 0 ){
 					delete dss.timeToDry;
+					all_batch.erase(all_batch.begin()+i);
 					numItem--;
+					
+				} else {
+					cout << drying_snap_shot_to_string(all_batch.at(i)) << endl;
 				}
-				cout << drying_snap_shot_to_string(all_batch.at(i)) << endl;
 			}
 		
 			cout <<  numItem << " items being tracked." << endl;
 		}
-		if (get_time_remaining(dss) <= 0){
-			delete dss.timeToDry;
-			numItem--;
-		}
+		
 		cout << "Choose an option: (A)dd, (V)iew Current Items, (Q)uit: ";
 		cin >> ans;
 		

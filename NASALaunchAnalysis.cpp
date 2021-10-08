@@ -30,7 +30,7 @@ vector<string> split(string str, char delim){
 	while (str.size() > 0) {
 		idx = str.find(delim);
 		
-		if (idx != string::npos){
+		if (idx < 0){
 			v.push_back(str.substr(0, idx));
 			str = str.substr(idx+1, str.size()-idx);
 			
@@ -75,7 +75,7 @@ int main(){
 	while (!inFS.fail()) {
 		getline(inFS, line);
 		int idx = line.find(":");
-		if (idx != string::npos){	
+		if (idx < 0){	
 			timeVal = line.substr(idx - 2, 5);
 			sum = sum + parse_line(timeVal);
 			count++;
