@@ -20,8 +20,8 @@ struct DryingSnapShot {
 
 long long int get_time_remaining(DryingSnapShot dss){
 	
-	int currTime = time(0) - dss.startTime;			// elapsed time
-	int duration = dss.timeToDry->GetTimeCodeAsSeconds() - currTime;
+	int currTime = time(0) - dss.startTime;			// calculate elapsed time since the batch was created
+	int duration = dss.timeToDry->GetTimeCodeAsSeconds() - currTime;	// duration from start to end
 	return duration;
 }
 
@@ -34,11 +34,12 @@ string drying_snap_shot_to_string(DryingSnapShot dss){
 }
 
 
+//calculate the surface area of a sphere
 double get_sphere_sa(double rad){
 	return 4 * M_PI * pow(rad, 2);
 }
 
-
+// use surface area to calculate the time taken to dry
 TimeCode *compute_time_code(double surfaceArea){
 	int sa = int (surfaceArea);					// convert to int to prevent overflow
 	TimeCode *totalDryTime = new TimeCode(0, 0, sa);		// place new data inside a heap
@@ -97,7 +98,7 @@ void tests(){
 
 
 int main(){
-	string ans;
+	char ans;
 	double rad;
 	DryingSnapShot dss;
 	vector<DryingSnapShot> all_batch;
@@ -106,9 +107,9 @@ int main(){
 	cout << "Choose an option: (A)dd, (V)iew Current Items, (Q)uit: ";
 	cin >> ans;
 	
-	while (ans != "q"){
+	while (tolower(ans) != 'q'){
 		
-		if (ans == "a"){
+		if (tolower(ans) == 'a'){
 			cout << "radius: ";
 			cin >> rad;
 			dss.startTime = time(0);
@@ -119,12 +120,12 @@ int main(){
 			all_batch.push_back(dss);		// add each batch into a vector
 			numItem++;
 			
-		} else if (ans == "v"){
+		} else if (tolower(ans) == 'v'){
 			
 			for (unsigned int i = 0; i < all_batch.size(); i++){
 				
-				/* If time remaining reaches 0, delete the batch from the heap 
-				 * and from the output */
+				/* If the time remaining reaches 0, delete the pointer from the heap 
+				 * and erase the object from the vector to prevent memory leak */
 				if (get_time_remaining(all_batch.at(i)) <= 0){		
 					delete all_batch.at(i).timeToDry;
 					all_batch.erase(all_batch.begin()+i);
@@ -146,7 +147,7 @@ int main(){
 				
 	//tests();
 	
-	if (ans == "q" && all_batch.size() > 0){
+	if (tolower(ans) == 'q' && all_batch.size() > 0){		// delete everything to make sure there's no memory leak
 		for (unsigned int i = 0; i < all_batch.size(); i++){
 			delete all_batch.at(i).timeToDry;
 			all_batch.erase(all_batch.begin()+i);
