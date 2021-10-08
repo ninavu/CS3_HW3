@@ -105,9 +105,9 @@ int main(){
 			
 		} else if (ans == "v"){
 			
-			for (unsigned int i = numItem; i > 0; i--){
+			for (unsigned int i = 0; i < all_batch.size(); i++){
 				
-				if (get_time_remaining(dss) <= 0 ){
+				if (get_time_remaining(dss) <= 0){
 					delete dss.timeToDry;
 					all_batch.erase(all_batch.begin()+i);
 					numItem--;
