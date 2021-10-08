@@ -371,8 +371,8 @@ void TestDivide(){
 	assert(tc4.ToString() == "1:1:45");
 	
 	TimeCode tc5 = TimeCode(2, 10, 45);
-	TimeCode tc6 = tc5 / 2.5;
-	assert(tc6.ToString() == "0:52:18");
+	TimeCode tc6 = tc5 / 0.5;
+	assert(tc6.ToString() == "4:21:30");
 	
 	TimeCode tc7 = TimeCode(1000000, 10, 45);
 	TimeCode tc8 = tc7 / 5;

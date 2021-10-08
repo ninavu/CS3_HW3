@@ -114,8 +114,11 @@ TimeCode TimeCode::operator*(double a) const{
 TimeCode TimeCode::operator/(double a) const{
 	TimeCode div;
 	
-	if (a < 1){				// cannot divide by 0 or negative input
+	if (a < 0){				// cannot divide by a negative input
 		throw invalid_argument("Negative and zero arguments not allowed: " + to_string(a));
+		
+	} else if (a == 0){				// cannot divide by 0
+		throw invalid_argument("Cannot divide by 0: " + to_string(a));	
 		
 	} else {
 		div.t = t / a;
